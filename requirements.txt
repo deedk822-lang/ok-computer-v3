@@ -1,0 +1,57 @@
+# Core Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# LangGraph & AI
+langgraph==0.2.28
+langchain==0.3.1
+langchain-openai==0.2.1
+langchain-anthropic==0.2.1
+temporalio==1.7.0
+
+# OpenTelemetry
+opentelemetry-api==1.21.0
+opentelemetry-sdk==1.21.0
+opentelemetry-instrumentation-fastapi==0.42b0
+opentelemetry-instrumentation-requests==0.42b0
+opentelemetry-instrumentation-httpx==0.42b0
+opentelemetry-exporter-otlp==1.21.0
+
+# Database & Cache
+asyncpg==0.29.0
+redis==5.0.1
+keydb==0.0.3
+psycopg2-binary==2.9.9
+
+# Security & AI Safety
+detoxify==0.5.2
+transformers==4.36.0
+torch==2.1.1
+torchvision==0.16.1
+clip-by-openai==1.0
+
+# Monitoring & Observability
+prometheus-client==0.19.0
+grafana-api==1.0.3
+
+# Slack Integration  
+slack-sdk==3.26.1
+slack-bolt==1.18.1
+
+# Kubernetes & Deployment
+kubernetes==28.1.0
+helm==0.1.0
+
+# ML Training
+litellm==1.49.3
+datasets==2.15.0
+accelerate==0.25.0
+
+# Development
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+ruff==0.1.6
+mypy==1.7.1

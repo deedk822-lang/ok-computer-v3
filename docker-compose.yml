@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  # Core Services
+  api-gateway:
+    build: ./services/api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SERVICE_NAME=api-gateway
+      - REDIS_URL=redis://redis-cluster:6379
+      - DATABASE_URL=postgresql://okc:okc@postgres:5432/okc
+    depends_on:
+      - redis-cluster
+      - postgres
+      - jaeger
+
+  ai-orchestrator:
+    build: ./services/ai-orchestrator
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SERVICE_NAME=ai-orchestrator  
+      - TEMPORAL_HOST=temporal:7233
+    depends_on:
+      - temporal
+      - jaeger
+
+  guardrail-service:
+    build: ./services/guardrail
+    ports:
+      - "8001:8001"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_SERVICE_NAME=guardrail-service
+
+  # Observability Stack
+  jaeger:
+    image: jaegertracing/all-in-one:1.52
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=okcomputer
+    volumes:
+      - ./config/grafana:/etc/grafana/provisioning
+
+  # State & Cache Layer  
+  redis-cluster:
+    image: redis:7-alpine
+    command: redis-server --cluster-enabled yes --appendonly yes
+    ports:
+      - "6379:6379"
+
+  keydb:
+    image: eqalpha/keydb:latest
+    command: keydb-server --active-replica yes --multi-master yes
+    ports:
+      - "6380:6379"
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=okc
+      - POSTGRES_USER=okc
+      - POSTGRES_PASSWORD=okc
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Workflow Engine
+  temporal:
+    image: temporalio/auto-setup:1.22.0
+    ports:
+      - "7233:7233"
+      - "8080:8080"
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=okc
+      - POSTGRES_PWD=okc
+      - POSTGRES_SEEDS=postgres
+    depends_on:
+      - postgres
+
+  # Local AI Stack
+  localai:
+    image: quay.io/go-skynet/local-ai:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./models:/models
+    environment:
+      - MODELS_PATH=/models
+
+volumes:
+  postgres_data:

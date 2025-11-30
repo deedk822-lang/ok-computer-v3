@@ -1,0 +1,35 @@
+apiVersion: v2
+name: ok-computer-v3
+description: Enterprise AI Orchestration System
+type: application
+version: 3.0.0
+appVersion: "3.0.0"
+
+keywords:
+  - ai
+  - orchestration
+  - observability
+  - langgraph
+  - opentelemetry
+
+home: https://github.com/your-org/ok-computer
+sources:
+  - https://github.com/your-org/ok-computer
+
+maintainers:
+  - name: OK Computer Team
+    email: team@okcomputer.dev
+
+dependencies:
+  - name: redis
+    version: "17.15.6"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: redis.enabled
+  - name: postgresql
+    version: "12.12.10"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.enabled
+  - name: jaeger
+    version: "0.71.14"
+    repository: "https://jaegertracing.github.io/helm-charts"
+    condition: jaeger.enabled
