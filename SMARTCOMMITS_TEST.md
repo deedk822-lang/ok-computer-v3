@@ -8,6 +8,7 @@ This file was created to validate the Jira-GitHub Smart Commits integration.
 - Branch: feature/SCRUM-1-smart-commits-test
 - Test Type: Multi-project Smart Commits validation
 - Timestamp: 2025-12-30T20:35:00Z
+- Second commit validation
 
 ## Expected Behavior
 
@@ -22,3 +23,9 @@ When commits are pushed with Smart Commits syntax (e.g., `SCRUM-1 #comment Testi
 1. Commit with comment: `SCRUM-1 #comment Smart Commits integration test from ok-computer-v3`
 2. Commit with time: `TC-12 #time 2h Validating multi-repo commits`
 3. View commits in Jira issue Development panel
+
+## Test Commit Log
+
+- [x] First commit with SCRUM-1 #comment
+- [ ] Second commit with TC-12 #time
+- [ ] Pull request creation for review
